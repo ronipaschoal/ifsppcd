@@ -1,7 +1,5 @@
 <?php
 
-//require_once(__DIR__ . '/../Util/Database.php');
-
 	// Conexão PDO com o banco de dados
 	function getConn()
 	{
@@ -15,7 +13,7 @@
 
 	$conn = getConn();
 	
-  	$sql = 'SELECT e.nome as estacao_nome, s.nome as sensor_nome, l.nome as leitura_nome, t.valor, l.unidadeMedida, t.data, l.ativo ' .
+  	$sql = 'SELECT e.nome as estacao_nome, s.id as id_sensor, s.nome as sensor_nome, l.nome as leitura_nome, t.valor, l.unidadeMedida, t.data, l.ativo ' .
 											'FROM temporeal t ' .
 											'JOIN leitura l ' .
 											'ON l.id = t.idLeitura ' .
@@ -29,7 +27,6 @@
   	
   	header('Content-Type: application/json');
   	echo json_encode($result);		
-
 
 ?>
 
