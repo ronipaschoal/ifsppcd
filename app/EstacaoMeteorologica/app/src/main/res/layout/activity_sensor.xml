@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    tools:context="br.edu.ifsp.sbv.estacaometeorologica.SensorActivity">
+
+    <TabHost
+        android:id="@+id/tabHost"
+        android:layout_width="200dip"
+        android:layout_height="300dip"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/tabSensor"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:contentDescription="@string/tab_sensor">
+
+                    <TextView
+                        android:id="@+id/txtSensor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="22sp"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="15dp"/>
+
+                    <CheckBox
+                        android:id="@+id/chkAtivo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:layout_gravity="end"
+                        android:text="@string/chk_ativo" />
+
+                    <TextView
+                        android:id="@+id/lblUnidadeMedida"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lbl_unidade_medida"
+                        android:layout_marginTop="25dp"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/txtUnidadeMedida"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorAccent"
+                        android:layout_marginTop="5dp"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/lblDataMedicao"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lbl_data_medicao"
+                        android:layout_marginTop="25dp"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/txtDataMedicao"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorAccent"
+                        android:layout_marginTop="5dp"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/lblValor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lbl_valor"
+                        android:layout_marginTop="25dp"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/txtValor"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorAccent"
+                        android:layout_marginTop="5dp"
+                        android:textSize="20sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tabHistorico"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingTop="16dp"
+                    android:contentDescription="@string/tab_historico">
+
+                    <ListView
+                        android:id="@+id/listViewHistorico"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </LinearLayout>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </TabHost>
+
+</RelativeLayout>
