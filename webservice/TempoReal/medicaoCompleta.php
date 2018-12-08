@@ -21,14 +21,14 @@
 
 	$conn = getConn();
 
-  	$sql = 'SELECT e.nome as estacao_nome, s.nome as sensor_nome, l.nome as leitura_nome, t.valor, l.unidadeMedida, t.data, l.ativo ' .
+  	$sql = 'SELECT e.* s.*, l.nome as leitura_nome, t.valor, l.unidadeMedida, t.data, l.ativo ' .
 											'FROM temporeal t ' .
 											'JOIN leitura l ' .
 											'ON l.id = t.idLeitura ' .
 											'JOIN estacao e ' .
 											'ON e.id = l.idEstacao ' .
 											'JOIN sensor s ' .
-											'ON s.id = l.idSensor ' .
+											'ON s.id = l.idSensor ' ;
 											'WHERE s.id = :idSensor ' .
 											'AND t.data >= :dataInicial ' .
 											'AND t.data <= :dataFinal';

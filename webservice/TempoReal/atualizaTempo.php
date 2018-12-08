@@ -11,19 +11,22 @@
 	  );
 	}
 
-	$conn = getConn();
+	$data = json_decode(file_get_contents('php://input'), true);
 	
-  	$sql = 'SELECT e.nome as estacao_nome, s.id as id_sensor, s.nome as sensor_nome, l.nome as leitura_nome, t.valor, l.unidadeMedida, t.data, l.ativo ' .
-											'FROM temporeal t ' .
-											'JOIN leitura l ' .
-											'ON l.id = t.idLeitura ' .
-											'JOIN estacao e ' .
-											'ON e.id = l.idEstacao ' .
-											'JOIN sensor s ' .
-											'ON s.id = l.idSensor ';
+	if(isset($data['id_estacao']) && isset($data['tempo_medicao'])) {
+		$idEstacao = $data['id_estacao'];	
+		$tempoMedicao = $data['tempo_medicao'];			 
+	}
+
+	$conn = getConn();
+
+  	$sql = 'update estacao set tempoLeitura = :tempo_medicao where id = :id_estacao';
   	$stmt = $conn->prepare($sql);
+  	$stmt->bindParam("tempo_medicao",$tempoMedicao);
+  	$stmt->bindParam("id_estacao",$idEstacao);
   	$stmt->execute();
   	$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
   	
   	header('Content-Type: application/json');
   	echo json_encode($result);		
