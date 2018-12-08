@@ -12,11 +12,9 @@ package model;
 public class MEstacao {
 
     private int id;
-    private int tempoMedicao;
     private String nome;
-    private String ip;
-    private String porta;
-    private String chaveAcesso;
+    private int tempoLeitura;
+    private boolean ativo;
 
     public int getId() {
         return id;
@@ -24,14 +22,6 @@ public class MEstacao {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getTempoMedicao() {
-        return tempoMedicao;
-    }
-
-    public void setTempoMedicao(int tempoMedicao) {
-        this.tempoMedicao = tempoMedicao;
     }
 
     public String getNome() {
@@ -42,28 +32,19 @@ public class MEstacao {
         this.nome = nome;
     }
 
-    public String getIp() {
-        return ip;
+    public int getTempoLeitura() {
+        return tempoLeitura;
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
+    public void setTempoLeitura(int tempoLeitura) {
+        this.tempoLeitura = tempoLeitura;
     }
 
-    public String getPorta() {
-        return porta;
+    public boolean isAtivo() {
+        return ativo;
     }
 
-    public void setPorta(String porta) {
-        this.porta = porta;
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
     }
-
-    public String getChaveAcesso() {
-        return chaveAcesso;
-    }
-
-    public void setChaveAcesso(String chaveAcesso) {
-        this.chaveAcesso = chaveAcesso;
-    }
-
 }

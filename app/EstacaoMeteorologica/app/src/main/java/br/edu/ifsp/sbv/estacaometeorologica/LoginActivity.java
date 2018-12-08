@@ -66,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
             DEstacao dbEstacao = new DEstacao();
             MEstacao estacao = new MEstacao();
 
-            estacao.setChaveAcesso(strChaveAcesso);
+            //estacao.setChaveAcesso(strChaveAcesso);
 
             estacao = dbEstacao.pesquisar(estacao);
 

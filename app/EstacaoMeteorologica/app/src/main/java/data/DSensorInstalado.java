@@ -3,7 +3,7 @@ package data;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.MSensorInstalado;
+import model.MLeitura;
 
 /**
  *
@@ -16,9 +16,9 @@ import model.MSensorInstalado;
  */
 public class DSensorInstalado {
 
-    public List<MSensorInstalado> listarSensores(MSensorInstalado sensorInstalado){
+    public List<MLeitura> listarSensores(MLeitura sensorInstalado){
 
-        List<MSensorInstalado> sensoresInstalados = new ArrayList<>();
+        List<MLeitura> sensoresInstalados = new ArrayList<>();
 
         //
         // Código para buscar sensores da estação no banco e carregar Models associados

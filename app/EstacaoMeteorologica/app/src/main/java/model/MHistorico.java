@@ -4,18 +4,19 @@ import java.util.Date;
 
 /**
  *
- * Classe: MMedicoes
+ * Classe: MHistorico
  * Objetivo: Classe model de Medições
  *
  * @author Isadora Giacomini de Moraes
  * @since 02/12/2018
  *
  */
-public class MMedicoes {
+public class MHistorico {
 
     private int id;
-    private Date date;
+    private MLeitura leitura;
     private String valor;
+    private Date data;
 
     public int getId() {
         return id;
@@ -25,12 +26,12 @@ public class MMedicoes {
         this.id = id;
     }
 
-    public Date getDate() {
-        return date;
+    public MLeitura getLeitura() {
+        return leitura;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setLeitura(MLeitura leitura) {
+        this.leitura = leitura;
     }
 
     public String getValor() {
@@ -39,5 +40,13 @@ public class MMedicoes {
 
     public void setValor(String valor) {
         this.valor = valor;
+    }
+
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
     }
 }

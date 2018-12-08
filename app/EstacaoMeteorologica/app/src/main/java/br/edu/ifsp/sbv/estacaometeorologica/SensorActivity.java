@@ -8,18 +8,15 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import data.DEstacao;
 import data.DSensorInstalado;
-import model.MEstacao;
-import model.MMedicoes;
-import model.MSensorInstalado;
+import model.MHistorico;
+import model.MLeitura;
 
 public class SensorActivity extends AppCompatActivity {
 
@@ -27,7 +24,7 @@ public class SensorActivity extends AppCompatActivity {
     private int sensorId;
 
     private DSensorInstalado dbSensorInstalado;
-    private List<MMedicoes> listHistorico;
+    private List<MHistorico> listHistorico;
     private ArrayAdapter<String> adapter;
 
     private ListView listViewHistorico;
@@ -77,21 +74,22 @@ public class SensorActivity extends AppCompatActivity {
         }
         else{
 
-            MSensorInstalado sensorInstalado = new MSensorInstalado();
+            MLeitura leitura = new MLeitura();
 
-            sensorInstalado.setId(sensorId);
+            leitura.setId(sensorId);
 
-            //sensorInstalado = dbSensorInstalado.pesquisar(sensorInstalado);
+            //leitura = dbSensorInstalado.pesquisar(leitura);
 
-            if (sensorInstalado != null && sensorInstalado.getId() > 0){
-                this.setTitle(sensorInstalado.getSensor().getNome());
+            if (leitura != null && leitura.getId() > 0){
+                this.setTitle(leitura.getSensor().getNome());
 
-                txtSensor.setText(sensorInstalado.getSensor().getNome());
-                txtUnidadeMedida.setText(sensorInstalado.getTipoMedicao().getUnidadeMedida());
-                txtDataMedicao.setText(sensorInstalado.getMedicoes().getDate().toString());
-                txtValor.setText(sensorInstalado.getMedicoes().getValor().toString());
+                txtSensor.setText(leitura.getSensor().getNome());
+                txtUnidadeMedida.setText(leitura.getUnidadeMedida());
 
-                //chkAtivo.setChecked(sensorInstalado.isAtivo()); Não tem campo Status
+                //txtDataMedicao.setText(leitura.getMedicoes().getDate().toString()); //TODO: pegar data
+                //txtValor.setText(leitura.getMedicoes().getValor().toString()); //TODO: pegar valor
+
+                //chkAtivo.setChecked(leitura.isAtivo()); Não tem campo Status
             }
             else{
 
@@ -104,9 +102,7 @@ public class SensorActivity extends AppCompatActivity {
                 startActivity(intent);
 
             }
-
         }
-
     }
 
     /**
@@ -173,11 +169,11 @@ public class SensorActivity extends AppCompatActivity {
 
             List<String> historico = new ArrayList<>();
 
-//            MSensorInstalado sensorInstalado = new MSensorInstalado();
-//            sensorInstalado.getEstacao().setId(estacaoId); // Buscar sensores conforme estação
+//            MLeitura leitura = new MLeitura();
+//            leitura.getEstacao().setId(estacaoId); // Buscar sensores conforme estação
 //            // (?) Filtrar por sensor ativo / inativo, porém não tem campo na tabela
 //
-//            listSensores = dbSensorInstalado.listarSensores(sensorInstalado);
+//            listSensores = dbSensorInstalado.listarSensores(leitura);
 //
 //            for (int i = 0; i < listSensores.size(); i++){
 //                historico.add(listSensores.get(i).getSensor().getNome());

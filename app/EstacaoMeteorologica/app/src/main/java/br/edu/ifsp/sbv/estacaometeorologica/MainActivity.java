@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
@@ -18,15 +17,14 @@ import java.util.List;
 import data.DEstacao;
 import data.DSensorInstalado;
 import model.MEstacao;
-import model.MSensor;
-import model.MSensorInstalado;
+import model.MLeitura;
 
 public class MainActivity extends AppCompatActivity {
 
     private int estacaoId;
 
     private DSensorInstalado dbSensorInstalado;
-    private List<MSensorInstalado> listSensores;
+    private List<MLeitura> listSensores;
     private ArrayAdapter<String> adapter;
 
     private Spinner cboStatus;
@@ -185,11 +183,11 @@ public class MainActivity extends AppCompatActivity {
 
             List<String> sensores = new ArrayList<>();
 
-            MSensorInstalado sensorInstalado = new MSensorInstalado();
-            sensorInstalado.getEstacao().setId(estacaoId); // Buscar sensores conforme estação
+            MLeitura leitura = new MLeitura();
+            leitura.getEstacao().setId(estacaoId); // Buscar sensores conforme estação
             // (?) Filtrar por sensor ativo / inativo, porém não tem campo na tabela
 
-            listSensores = dbSensorInstalado.listarSensores(sensorInstalado);
+            listSensores = dbSensorInstalado.listarSensores(leitura);
 
             for (int i = 0; i < listSensores.size(); i++){
                 sensores.add(listSensores.get(i).getSensor().getNome());
