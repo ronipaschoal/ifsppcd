@@ -1,28 +1,21 @@
 <?php
 
-	// Conexão PDO com o banco de dados
-	function getConn()
-	{
-	 return new PDO('mysql:host=localhost;dbname=estacaometeriologicapdm',
-	  'root',
-	  '1234',
-	  array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
-	  
-	  );
-	}
+	require_once(__DIR__ . '/../Util/DBConnection.php');
 
 	$data = json_decode(file_get_contents('php://input'), true);
 	
-	if(isset($data['id_estacao']) && isset($data['tempo_medicao'])) {
+	if(isset($data['id_estacao']) && isset($data['tempo_medicao']) && isset($data['ativo'])) {
 		$idEstacao = $data['id_estacao'];	
-		$tempoMedicao = $data['tempo_medicao'];			 
+		$tempoMedicao = $data['tempo_medicao'];	
+		$ativo = $data['ativo'];		 
 	}
 
 	$conn = getConn();
 
-  	$sql = 'update estacao set tempoLeitura = :tempo_medicao where id = :id_estacao';
+  	$sql = 'update estacao set tempoLeitura = :tempo_medicao, ativo = :ativo where id = :id_estacao';
   	$stmt = $conn->prepare($sql);
   	$stmt->bindParam("tempo_medicao",$tempoMedicao);
+  	$stmt->bindParam("ativo",$ativo);
   	$stmt->bindParam("id_estacao",$idEstacao);
   	$stmt->execute();
   	$result = $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -1,15 +1,6 @@
 <?php
 
-	// Conexão PDO com o banco de dados
-	function getConn()
-	{
-	 return new PDO('mysql:host=localhost;dbname=estacaometeriologicapdm',
-	  'root',
-	  '1234',
-	  array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
-	  
-	  );
-	}
+	require_once(__DIR__ . '/../Util/DBConnection.php');
 
 	$data = json_decode(file_get_contents('php://input'), true);
 	
