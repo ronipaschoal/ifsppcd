@@ -1,9 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/colorWhite"
+    android:orientation="vertical"
     tools:context="br.edu.ifsp.sbv.estacaometeorologica.ConfiguracoesActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/lblInfoConfiguracao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/lbl_info_configuracao"
+        android:paddingBottom="20dp" />
+
+    <TextView
+        android:id="@+id/txtEstacaoMeteorologica"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorAccent"
+        android:textSize="22sp"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"/>
+
+    <CheckBox
+        android:id="@+id/chkAtivo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_gravity="end"
+        android:text="@string/chk_ativo" />
+
+    <EditText
+        android:id="@+id/txtTempoLeitura"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:hint="@string/lbl_tempo_leitura"
+        android:layout_marginTop="25dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:maxLength="255"
+        android:inputType="number"
+        android:background="@drawable/edit_text_style"
+        style="@style/EditTextTheme" />
+    <TextView
+        android:id="@+id/txtUnidadeTempoLeitura"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="textEnd"
+        android:text="@string/lbl_unidade_tempo"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/btnSalvar"
+            style="@style/ButtonAccentTheme"
+            android:text="@string/btn_salvar"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:onClick="btnSalvar_Click" />
+
+        <Button
+            android:id="@+id/btnCancelar"
+            style="@style/ButtonDefaultTheme"
+            android:layout_alignParentBottom="true"
+            android:layout_toStartOf="@+id/btnSalvar"
+            android:layout_marginEnd="5dp"
+            android:text="@string/btn_cancelar"
+            android:onClick="btnCancelar_Click" />
+
+    </RelativeLayout>
+
+</LinearLayout>

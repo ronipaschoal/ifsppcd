@@ -1,12 +1,15 @@
 <resources>
-    <string name="app_name">Estacao Meteorologica</string>
+    <string name="app_name">IFSP PCD</string>
 
+    <string name="title_estacoes">Estações Meteorológicas</string>
     <string name="lbl_chave_acesso">Chave de acesso</string>
+    <string name="lbl_tempo_leitura">Tempo de leitura</string>
     <string name="lbl_status">Status</string>
     <string name="lbl_unidade_medida">Unidade de medida: </string>
     <string name="lbl_data_medicao">Data da medição: </string>
     <string name="lbl_valor">Valor: </string>
     <string name="btn_entrar">Entrar</string>
+    <string name="btn_salvar">Salvar</string>
     <string name="btn_cancelar">Cancelar</string>
     <string name="tab_sensor">Dados</string>
     <string name="tab_historico">Histórico</string>
@@ -15,19 +18,21 @@
     <string name="menu_item_configuracoes">Configurações</string>
     <string name="menu_item_sair">Sair</string>
 
-    <string name="lbl_info_login">Para acessar as estações meteorológicas, informe a chave de acesso
-    e clique em Entrar.</string>
-    <string name="lbl_info_listagem">Para visualizar, clique em um sensor. Para filtrar selecione um status</string>
+    <string name="lbl_info_estacao">Para listar os sensores, clique em uma estação meteorológica. Para filtrar selecione um status.</string>
+    <string name="lbl_info_listagem">Para visualizar, clique em um sensor. Para filtrar selecione um status.</string>
+    <string name="lbl_info_configuracao">Para configurar estação meteorológica, informe os campos abaixo e clique em Salvar.</string>
 
     <string name="mensagem_chave_invalida">Informe uma chave de acesso válida.</string>
     <string name="mensagem_chave_incorreta">Chave de acesso incorreta. Tente novamente.</string>
     <string name="mensagem_nenhum_registro">Nenhum registro cadastrado.</string>
+    <string name="mensagem_salvar">Registro salvo com sucesso.</string>
 
     <string name="erro_carregar">Não foi possível carregar.</string>
     <string name="erro_entrar">Não foi possível entrar.</string>
     <string name="erro_salvar">Não foi possível salvar.</string>
     <string name="erro_estacoes">Não foi possível carregar estações meteorológicas.</string>
     <string name="erro_sensores">Não foi possível carregar sensores.</string>
+    <string name="lbl_unidade_tempo">segundos</string>
 
     <string-array name="array_status">
         <item>Ativo</item>

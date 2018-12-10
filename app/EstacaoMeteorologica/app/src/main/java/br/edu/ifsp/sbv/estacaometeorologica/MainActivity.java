@@ -3,8 +3,6 @@ package br.edu.ifsp.sbv.estacaometeorologica;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,20 +13,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 import data.DEstacao;
-import data.DSensorInstalado;
 import model.MEstacao;
-import model.MLeitura;
 
+/**
+ *
+ * Classe: MainActivity
+ * Objetivo: Login no aplicativo
+ *
+ * @author Isadora Giacomini de Moraes
+ * @since 02/12/2018
+ *
+ */
 public class MainActivity extends AppCompatActivity {
 
-    private int estacaoId;
-
-    private DSensorInstalado dbSensorInstalado;
-    private List<MLeitura> listSensores;
+    private DEstacao dbEstacao;
+    private List<MEstacao> listEstacoes;
     private ArrayAdapter<String> adapter;
 
+    private String[] status;
+
     private Spinner cboStatus;
-    private ListView listViewSensores;
+    private ListView listViewEstacoes;
 
     /**
      * Método onCreate
@@ -38,14 +43,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        this.setTitle(R.string.title_estacoes);
+
         try {
 
-            estacaoId = getIntent().getIntExtra("estacao", 0);
+            dbEstacao = new DEstacao();
 
-            dbSensorInstalado = new DSensorInstalado();
-
-            carregarEstacao();
-            carregarControles();
+            this.carregarControles();
 
         }
         catch (Exception ex) {
@@ -54,118 +58,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Criar menu
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.settings_main, menu);
-        return true;
-    }
-
-    /**
-     * Selecionar opção do menu
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        try {
-
-            int id = item.getItemId();
-
-            Intent intent;
-
-            switch (id) {
-
-                case R.id.btnConfiguracoes:
-                    intent = new Intent(this, ConfiguracoesActivity.class);
-                    this.finish();
-                    startActivity(intent);
-
-                    break;
-
-                case R.id.btnSair:
-                    intent = new Intent(this, LoginActivity.class);
-                    this.finish();
-                    startActivity(intent);
-
-                    break;
-
-            }
-
-        }
-        catch (Exception ex){
-
-            ActivityBase.showMessage(getApplicationContext(), getString(R.string.erro_carregar) + " " + ex.getMessage());
-
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * Carregar estação
-     */
-    private void carregarEstacao(){
-
-        if (estacaoId <= 0){
-
-            //
-            // Quando estação não informada, então abrir tela de login
-            //
-            Intent intent = new Intent(this, LoginActivity.class);
-            this.finish();
-            startActivity(intent);
-
-        }
-        else{
-
-            DEstacao dbEstacao = new DEstacao();
-            MEstacao estacao = new MEstacao();
-
-            estacao.setId(estacaoId);
-
-            estacao = dbEstacao.pesquisar(estacao);
-
-            if (estacao != null && estacao.getId() > 0){
-                this.setTitle(estacao.getNome()); // Setar título da Activity
-            }
-            else{
-
-                //
-                // Quando estação não encontrada, então abrir tela de login
-                //
-                Intent intent = new Intent(this, LoginActivity.class);
-                this.finish();
-                startActivity(intent);
-
-            }
-
-        }
-
-    }
-
-    /**
      * Carregar componentes do layout
      */
     private void carregarControles(){
 
         cboStatus = (Spinner)findViewById(R.id.cboStatus);
-        listViewSensores = (ListView)findViewById(R.id.listViewSensores);
-        listViewSensores.setOnItemClickListener(visualizarSensor);
+        listViewEstacoes = (ListView) findViewById(R.id.listViewEstacoes);
+        listViewEstacoes.setOnItemClickListener(listarSensores);
 
-        listViewSensores = null;
+        //listViewEstacoes = null;
 
         carregarSpinner();
-        carregarSensores();
+        carregarEstacoes();
 
+        cboStatus.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                carregarEstacoes();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     /**
      * Carregar spinner Status
      */
     private void carregarSpinner(){
-        String[] status = this.getResources().getStringArray(R.array.array_status);
+        status = this.getResources().getStringArray(R.array.array_status);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, status);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -175,40 +99,41 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Carregar sensores da estação meteorológica
+     * Carregar estações meteorológicas
      */
-    private void carregarSensores(){
+    private void carregarEstacoes(){
 
         try {
 
-            List<String> sensores = new ArrayList<>();
+            List<String> estacoes = new ArrayList<>();
 
-            MLeitura leitura = new MLeitura();
-            leitura.getEstacao().setId(estacaoId); // Buscar sensores conforme estação
-            // (?) Filtrar por sensor ativo / inativo, porém não tem campo na tabela
+            boolean bAtivo = status[0].equals(cboStatus.getSelectedItem().toString());
 
-            listSensores = dbSensorInstalado.listarSensores(leitura);
+            MEstacao estacao = new MEstacao();
+            estacao.setAtivo(bAtivo);
 
-            for (int i = 0; i < listSensores.size(); i++){
-                sensores.add(listSensores.get(i).getSensor().getNome());
+            listEstacoes = dbEstacao.listarEstacoes(estacao);
+
+            for (int i = 0; i < listEstacoes.size(); i++){
+                estacoes.add(listEstacoes.get(i).getNome());
             }
 
-            if (listSensores != null) {
+            if (listEstacoes != null) {
 
-                if (listSensores.size() > 0) {
+                if (listEstacoes.size() > 0) {
                     adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
-                            sensores);
-                    listViewSensores.setAdapter(adapter);
+                            estacoes);
+                    listViewEstacoes.setAdapter(adapter);
                 }
                 else{
                     ActivityBase.showMessage(getApplicationContext(), getString(R.string.mensagem_nenhum_registro));
-                    listViewSensores.setAdapter(null);
+                    listViewEstacoes.setAdapter(null);
                 }
 
             }
             else{
                 ActivityBase.showMessage(getApplicationContext(), getString(R.string.mensagem_nenhum_registro));
-                listViewSensores.setAdapter(null);
+                listViewEstacoes.setAdapter(null);
             }
 
         } catch (Exception ex) {
@@ -217,17 +142,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Método onItemClickListener, para visualizar sensor
+     * Método onItemClickListener, para visualizar sensores da estação
      */
-    private AdapterView.OnItemClickListener visualizarSensor = new AdapterView.OnItemClickListener() {
+    private AdapterView.OnItemClickListener listarSensores = new AdapterView.OnItemClickListener() {
 
         public void onItemClick(AdapterView<?> arg0, View arg1, int pos, long id) {
 
             try {
 
-                Intent intent = new Intent(getApplicationContext(), SensorActivity.class);
-                intent.putExtra("estacao", estacaoId);
-                intent.putExtra("sensor", listSensores.get(pos).getId());
+                Intent intent = new Intent(getApplicationContext(), SensoresActivity.class);
+                intent.putExtra("estacao", listEstacoes.get(pos).getId());
                 finish();
 
                 startActivity(intent);

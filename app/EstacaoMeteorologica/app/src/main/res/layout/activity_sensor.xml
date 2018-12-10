@@ -105,6 +105,29 @@
                         android:layout_marginTop="5dp"
                         android:textSize="20sp" />
 
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <Button
+                            android:id="@+id/btnSalvar"
+                            style="@style/ButtonAccentTheme"
+                            android:text="@string/btn_salvar"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentEnd="true"
+                            android:onClick="btnSalvar_Click" />
+
+                        <Button
+                            android:id="@+id/btnCancelar"
+                            style="@style/ButtonDefaultTheme"
+                            android:layout_alignParentBottom="true"
+                            android:layout_toStartOf="@+id/btnSalvar"
+                            android:layout_marginEnd="5dp"
+                            android:text="@string/btn_cancelar"
+                            android:onClick="btnCancelar_Click" />
+
+                    </RelativeLayout>
+
                 </LinearLayout>
 
                 <LinearLayout

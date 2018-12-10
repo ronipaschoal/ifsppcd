@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="br.edu.ifsp.sbv.estacaometeorologica">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,19 +23,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".SensoresActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".SensorActivity"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".SensoresActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="br.edu.ifsp.sbv.estacaometeorologica.MainActivity" />
+                android:value="br.edu.ifsp.sbv.estacaometeorologica.SensoresActivity" />
         </activity>
         <activity android:name=".ConfiguracoesActivity"
             android:screenOrientation="portrait" />

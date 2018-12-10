@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWhite"
-    android:orientation="vertical"
-    tools:context="br.edu.ifsp.sbv.estacaometeorologica.MainActivity">
+    tools:context="br.edu.ifsp.sbv.estacaometeorologica.SensoresActivity">
 
     <TextView
-        android:id="@+id/lblInfoEstacoes"
+        android:id="@+id/lblInfoListagem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/lbl_info_estacao"
+        android:text="@string/lbl_info_listagem"
         android:padding="16dp"
         android:paddingBottom="20dp" />
 
@@ -23,11 +21,11 @@
         android:text="@string/lbl_status"
         android:padding="16dp"
         android:paddingBottom="20dp"
-        android:layout_below="@+id/lblInfoEstacoes"
+        android:layout_below="@+id/lblInfoListagem"
         android:layout_toStartOf="@+id/cboStatus" />
 
     <ListView
-        android:id="@+id/listViewEstacoes"
+        android:id="@+id/listViewSensores"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
@@ -37,8 +35,8 @@
         android:id="@+id/cboStatus"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/lblInfoEstacoes"
+        android:layout_below="@+id/lblInfoListagem"
         android:layout_alignParentEnd="true"
-        android:layout_above="@+id/listViewEstacoes" />
+        android:layout_above="@+id/listViewSensores" />
 
 </RelativeLayout>

@@ -1,29 +1,36 @@
 package br.edu.ifsp.sbv.estacaometeorologica;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import data.DSensorInstalado;
+import data.DHistorico;
+import data.DLeitura;
+import data.DTempoReal;
+import model.MEstacao;
 import model.MHistorico;
 import model.MLeitura;
+import model.MTempoReal;
 
 public class SensorActivity extends AppCompatActivity {
 
     private int estacaoId;
-    private int sensorId;
+    private int leituraId;
 
-    private DSensorInstalado dbSensorInstalado;
+    private DLeitura dbLeitura;
     private List<MHistorico> listHistorico;
     private ArrayAdapter<String> adapter;
 
@@ -31,6 +38,8 @@ public class SensorActivity extends AppCompatActivity {
 
     private TextView txtSensor, txtUnidadeMedida, txtDataMedicao, txtValor;
     private CheckBox chkAtivo;
+
+    private SimpleDateFormat simpleDate =  new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
     /**
      * Método onCreate
@@ -43,9 +52,9 @@ public class SensorActivity extends AppCompatActivity {
         try {
 
             estacaoId = getIntent().getIntExtra("estacao", 0);
-            sensorId = getIntent().getIntExtra("sensor", 0);
+            leituraId = getIntent().getIntExtra("leitura", 0);
 
-            dbSensorInstalado = new DSensorInstalado();
+            dbLeitura = new DLeitura();
 
             carregarControles();
             carregarSensor();
@@ -61,12 +70,12 @@ public class SensorActivity extends AppCompatActivity {
      */
     private void carregarSensor(){
 
-        if (sensorId <= 0){
+        if (leituraId <= 0){
 
             //
             // Quando sensor não encontrado, então abrir listagem
             //
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, SensoresActivity.class);
             intent.putExtra("estacao", estacaoId);
             this.finish();
             startActivity(intent);
@@ -74,29 +83,39 @@ public class SensorActivity extends AppCompatActivity {
         }
         else{
 
+            MEstacao estacao = new MEstacao();
+            estacao.setId(estacaoId);
+
             MLeitura leitura = new MLeitura();
+            leitura.setId(leituraId);
+            leitura.setEstacao(estacao);
 
-            leitura.setId(sensorId);
 
-            //leitura = dbSensorInstalado.pesquisar(leitura);
+            leitura = dbLeitura.pesquisar(leitura);
 
             if (leitura != null && leitura.getId() > 0){
                 this.setTitle(leitura.getSensor().getNome());
 
                 txtSensor.setText(leitura.getSensor().getNome());
                 txtUnidadeMedida.setText(leitura.getUnidadeMedida());
+                chkAtivo.setChecked(leitura.isAtivo());
 
-                //txtDataMedicao.setText(leitura.getMedicoes().getDate().toString()); //TODO: pegar data
-                //txtValor.setText(leitura.getMedicoes().getValor().toString()); //TODO: pegar valor
+                //pesquisar medicao em tempo real
+                DTempoReal dTempoReal = new DTempoReal();
+                MTempoReal  tempoReal = new MTempoReal();
+                tempoReal.setLeitura(leitura);
 
-                //chkAtivo.setChecked(leitura.isAtivo()); Não tem campo Status
+                tempoReal = dTempoReal.pesquisar(tempoReal);
+
+                txtDataMedicao.setText(simpleDate.format(tempoReal.getData()));
+                txtValor.setText(tempoReal.getValor());
             }
             else{
 
                 //
                 // Quando sensor não encontrado, então abrir listagem
                 //
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, SensoresActivity.class);
                 intent.putExtra("estacao", estacaoId);
                 this.finish();
                 startActivity(intent);
@@ -117,8 +136,8 @@ public class SensorActivity extends AppCompatActivity {
 
         chkAtivo = (CheckBox)findViewById(R.id.chkAtivo);
 
-        listViewHistorico = (ListView)findViewById(R.id.listViewSensores);
-        listViewHistorico = null;
+        listViewHistorico = (ListView)findViewById(R.id.listViewHistorico);
+        //listViewHistorico = null;
 
         TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
         tabHost.setup();
@@ -167,38 +186,103 @@ public class SensorActivity extends AppCompatActivity {
 
         try {
 
-            List<String> historico = new ArrayList<>();
+            List<String> listStrHistorico = new ArrayList<>();
 
-//            MLeitura leitura = new MLeitura();
-//            leitura.getEstacao().setId(estacaoId); // Buscar sensores conforme estação
-//            // (?) Filtrar por sensor ativo / inativo, porém não tem campo na tabela
-//
-//            listSensores = dbSensorInstalado.listarSensores(leitura);
-//
-//            for (int i = 0; i < listSensores.size(); i++){
-//                historico.add(listSensores.get(i).getSensor().getNome());
-//            }
-//
-//            if (listSensores != null) {
-//
-//                if (listSensores.size() > 0) {
-//                    adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
-//                            historico);
-//                    listViewSensores.setAdapter(adapter);
-//                }
-//                else{
-//                    ActivityBase.showMessage(getApplicationContext(), getString(R.string.mensagem_nenhum_registro));
-//                    listViewSensores.setAdapter(null);
-//                }
-//
-//            }
-//            else{
-//                ActivityBase.showMessage(getApplicationContext(), getString(R.string.mensagem_nenhum_registro));
-//                listViewSensores.setAdapter(null);
-//            }
+            DHistorico dbHistorico = new DHistorico();
+            MHistorico historico = new MHistorico();
+
+            MEstacao estacao = new MEstacao();
+            estacao.setId(estacaoId);
+
+            MLeitura leitura = new MLeitura();
+            leitura.setId(leituraId);
+            leitura.setEstacao(estacao);
+
+            historico.setLeitura(leitura); // Buscar histórico do sensor (leitura)
+
+            listHistorico = dbHistorico.listar(historico);
+
+            for (int i = 0; i < listHistorico.size(); i++){
+                listStrHistorico.add("[" + simpleDate.format(listHistorico.get(i).getData()) + "] - Valor: " +
+                                     listHistorico.get(i).getValor());
+            }
+
+            System.out.println("tamanho historico");
+            System.out.println(listHistorico.size());
+
+            if (listHistorico != null) {
+
+                if (listHistorico.size() > 0) {
+                    adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
+                            listStrHistorico);
+                    listViewHistorico.setAdapter(adapter);
+                }
+                else{
+                    ActivityBase.showMessage(getApplicationContext(), getString(R.string.mensagem_nenhum_registro));
+                    listViewHistorico.setAdapter(null);
+                }
+
+            }
+            else{
+                ActivityBase.showMessage(getApplicationContext(), getString(R.string.mensagem_nenhum_registro));
+                listViewHistorico.setAdapter(null);
+            }
 
         } catch (Exception ex) {
             ActivityBase.showMessage(getApplicationContext(), getString(R.string.erro_carregar) + " " + ex.getMessage());
         }
+    }
+
+    /**
+     * Método onClick do botão btnSalvar
+     */
+    public void btnSalvar_Click(View view){
+
+        try {
+
+            //
+            // Salvar status do sensor
+            //
+            DLeitura dbLeitura = new DLeitura();
+            MLeitura leitura = new MLeitura();
+
+            leitura.setAtivo(chkAtivo.isChecked());
+
+            boolean bSalvo = dbLeitura.salvar(leitura);
+
+            if (bSalvo) {
+                ActivityBase.showMessage(getApplicationContext(), getString(R.string.mensagem_salvar));
+            }
+            else {
+                ActivityBase.showMessage(getApplicationContext(), getString(R.string.erro_salvar));
+            }
+
+
+        }
+        catch (Exception ex){
+            ActivityBase.showMessage(getApplicationContext(), getString(R.string.erro_salvar) + " " + ex.getMessage());
+        }
+    }
+
+    /**
+     * Método onClick do botão btnCancelar
+     */
+    public void btnCancelar_Click(View view){
+
+        try {
+
+            //
+            // Volta para a tela de listagem de sensores
+            //
+            Intent intent = new Intent(this, SensoresActivity.class);
+            intent.putExtra("estacao", estacaoId);
+            this.finish();
+            startActivity(intent);
+
+        }
+        catch (Exception ex){
+            ActivityBase.showMessage(getApplicationContext(), getString(R.string.erro_carregar) + " " + ex.getMessage());
+        }
+
     }
 }
