@@ -2,7 +2,8 @@ package utils;
 
 public final class EndPoints {
 
-    public static String URL_SERVER = "http://192.168.0.109/webservice/";
+    //public static String URL_SERVER = "http://192.168.0.109/webservice/";
+    public static String URL_SERVER = "http://34.197.30.158/webservice/";
 
     public static String GET_ESTACOES = URL_SERVER + "TempoReal/getEstacoes.php";
     public static String SET_ESTACAO = URL_SERVER + "TempoReal/atualizaTempo.php";
