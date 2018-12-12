@@ -1,8 +1,9 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class MTempoReal {
+public class MTempoReal implements Serializable {
 
     private int id;
     private MLeitura leitura;

@@ -1,5 +1,7 @@
 package data;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -20,13 +22,39 @@ import utils.HttpPost;
  */
 public class DEstacao {
 
-    public List<MEstacao> listarEstacoes(MEstacao estacao){
+    public List<MEstacao> listarEstacoes(MEstacao estacao, String json){
 
         List<MEstacao> estacoesMeteorologicas = new ArrayList<>();
 
         //
         // Código para buscar estações meteorológicas no banco e carregar Models associados
         //
+        try {
+            JSONArray jsonarray = new JSONArray(json);
+            for(int i=0; i < jsonarray.length(); i++) {
+                JSONObject jsonobject = jsonarray.getJSONObject(i);
+
+                MEstacao itemEstacao = new MEstacao();
+
+                itemEstacao.setId( jsonobject.getInt("id") );
+                itemEstacao.setNome( jsonobject.getString("nome") );
+                itemEstacao.setTempoLeitura( jsonobject.getInt("tempoLeitura") );
+                itemEstacao.setAtivo( (jsonobject.getInt("ativo") == 1)  );
+
+                if(estacao.isAtivo() && itemEstacao.isAtivo()) { //listar estações ativas
+                    estacoesMeteorologicas.add(itemEstacao);
+                }
+                else if(!estacao.isAtivo() && !itemEstacao.isAtivo()){ //listar estações inativas
+                    estacoesMeteorologicas.add(itemEstacao);
+                }
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        /*//testes estaticos
         if(estacao.isAtivo()) { //listar estações ativas
             MEstacao estacao1 = new MEstacao();
             estacao1.setId(1);
@@ -45,12 +73,12 @@ public class DEstacao {
 
             estacoesMeteorologicas.add(estacao2);
         }
-
+        */
         return estacoesMeteorologicas;
 
     }
 
-    public MEstacao pesquisar(MEstacao pEstacao){
+    public MEstacao pesquisar(MEstacao pEstacao, String json){
 
         MEstacao estacao = null;
 
@@ -58,15 +86,32 @@ public class DEstacao {
         // Código para pesquisar no banco
         //
         if(pEstacao.getId() > 0){ //pesquisar pelo id da estacao
-            estacao = new MEstacao();
-            estacao.setId(1);
-            estacao.setNome("ESTACAO FIXA");
-            estacao.setTempoLeitura(5000);
-            estacao.setAtivo(true);
+
+            try {
+                JSONArray jsonarray = new JSONArray(json);
+                for(int i=0; i < jsonarray.length(); i++) {
+                    JSONObject jsonobject = jsonarray.getJSONObject(i);
+
+                    MEstacao itemEstacao = new MEstacao();
+
+                    itemEstacao.setId( jsonobject.getInt("id") );
+                    itemEstacao.setNome( jsonobject.getString("nome") );
+                    itemEstacao.setTempoLeitura( jsonobject.getInt("tempoLeitura") );
+                    itemEstacao.setAtivo( (jsonobject.getInt("ativo") == 1)  );
+
+                    if(pEstacao.getId() == itemEstacao.getId()){ //encontrou a estacao
+                        estacao = itemEstacao;
+                    }
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
 
         return estacao;
-
     }
 
     public boolean salvar(MEstacao estacao){
@@ -82,7 +127,7 @@ public class DEstacao {
             jsonParam.put("tempo_medicao", estacao.getTempoLeitura()*1000);
             jsonParam.put("ativo", (estacao.isAtivo())? 1 : 0);
 
-            new HttpPost(EndPoints.CONFIG_ESTACAO).execute(jsonParam.toString());
+            new HttpPost(EndPoints.SET_ESTACAO).execute(jsonParam.toString());
             bSalvo = true;
 
         } catch (Exception e) {

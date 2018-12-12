@@ -9,6 +9,7 @@
     <string name="lbl_data_medicao">Data da medição: </string>
     <string name="lbl_valor">Valor: </string>
     <string name="btn_entrar">Entrar</string>
+    <string name="btn_voltar">Voltar</string>
     <string name="btn_salvar">Salvar</string>
     <string name="btn_cancelar">Cancelar</string>
     <string name="tab_sensor">Dados</string>
@@ -26,6 +27,7 @@
     <string name="mensagem_chave_incorreta">Chave de acesso incorreta. Tente novamente.</string>
     <string name="mensagem_nenhum_registro">Nenhum registro cadastrado.</string>
     <string name="mensagem_salvar">Registro salvo com sucesso.</string>
+    <string name="mensagem_sem_historico">Histórico vazio</string>
 
     <string name="erro_carregar">Não foi possível carregar.</string>
     <string name="erro_entrar">Não foi possível entrar.</string>
@@ -33,6 +35,7 @@
     <string name="erro_estacoes">Não foi possível carregar estações meteorológicas.</string>
     <string name="erro_sensores">Não foi possível carregar sensores.</string>
     <string name="lbl_unidade_tempo">segundos</string>
+    <string name="carregando">Carregando</string>
 
     <string-array name="array_status">
         <item>Ativo</item>

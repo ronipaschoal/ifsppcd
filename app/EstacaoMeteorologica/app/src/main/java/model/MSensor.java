@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  *
  * Classe: MSensor
@@ -9,7 +11,7 @@ package model;
  * @since 02/12/2018
  *
  */
-public class MSensor {
+public class MSensor implements Serializable {
 
     private int id;
     private String nome;

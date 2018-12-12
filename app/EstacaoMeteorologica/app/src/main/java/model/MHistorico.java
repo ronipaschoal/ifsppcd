@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Date;
  * @since 02/12/2018
  *
  */
-public class MHistorico {
+public class MHistorico implements Serializable {
 
     private int id;
     private MLeitura leitura;

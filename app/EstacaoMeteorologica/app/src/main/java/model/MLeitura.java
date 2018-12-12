@@ -1,5 +1,7 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  *
  * Classe: MLeitura
@@ -9,7 +11,7 @@ package model;
  * @since 02/12/2018
  *
  */
-public class MLeitura {
+public class MLeitura implements Serializable {
 
     private int id;
     private MEstacao estacao;

@@ -13,6 +13,7 @@ import model.MEstacao;
 public class ConfiguracoesActivity extends AppCompatActivity {
 
     private int estacaoId;
+    private MEstacao estacaoConf;
 
     private DEstacao dbEstacao;
 
@@ -28,7 +29,8 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
         try {
 
-            estacaoId = getIntent().getIntExtra("estacao", 0);
+            estacaoId = getIntent().getIntExtra("estacaoId", 0);
+            estacaoConf = (MEstacao) getIntent().getSerializableExtra("estacao");
 
             dbEstacao = new DEstacao();
 
@@ -58,17 +60,15 @@ public class ConfiguracoesActivity extends AppCompatActivity {
         }
         else{
 
-            MEstacao estacao = new MEstacao();
+            //MEstacao estacao = new MEstacao();
+            //estacao.setId(estacaoId);
+            //estacao = dbEstacao.pesquisar(estacao); //TODO: fazer receber obj estacao serializado
 
-            estacao.setId(estacaoId);
+            if (estacaoConf != null && estacaoConf.getId() > 0){
 
-            estacao = dbEstacao.pesquisar(estacao);
-
-            if (estacao != null && estacao.getId() > 0){
-
-                txtEstacaoMeteorologica.setText(estacao.getNome());
-                txtTempoLeitura.setText( String.valueOf(estacao.getTempoLeitura()/1000) );
-                chkAtivo.setChecked(estacao.isAtivo());
+                txtEstacaoMeteorologica.setText(estacaoConf.getNome());
+                txtTempoLeitura.setText( String.valueOf(estacaoConf.getTempoLeitura()/1000) );
+                chkAtivo.setChecked(estacaoConf.isAtivo());
             }
             else{
 
