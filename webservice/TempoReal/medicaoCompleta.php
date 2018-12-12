@@ -15,6 +15,7 @@
 		  			'e.tempoLeitura, ' .
 		  			'e.ativo as estacao_ativo, ' .
 		  			's.*, ' .
+            'l.id as id_leitura, ' .
 		  			'l.codigo as codigo, ' .
 		  			'l.nome as leitura_nome, ' .
 		  			'l.unidadeMedida, ' .
@@ -37,9 +38,9 @@
 
   	foreach ($result as $linha) {
   		$dados[] = array(
-  			"id" => $linha["id_estacao"], 
+  			"id" => $linha["id_leitura"], 
   			"codigo" => $linha["codigo"],
-  			"nome" => $linha["nome_estacao"],  			
+  			"nome" => $linha["leitura_nome"],  			
   			"unidadeMedida" => $linha["unidadeMedida"],
   			"ativo" => $linha["leitura_ativo"],
   			"sensor" => array(
