@@ -47,15 +47,15 @@
 		$stmt->bindParam("data",$dataAtual);
 		$stmt->execute();
 		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-	}
 	
-	$sql = 'INSERT INTO temporeal (idLeitura, valor, data) VALUES (:idLeitura, :valor, :data)';
-	$stmt = $conn->prepare($sql);
-	$stmt->bindParam("idLeitura",$idLeitura);
-	$stmt->bindParam("valor",$leitura);
-	$stmt->bindParam("data",$dataAtual);
-	$stmt->execute();
-	$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		$sql = 'INSERT INTO temporeal (idLeitura, valor, data) VALUES (:idLeitura, :valor, :data)';
+		$stmt = $conn->prepare($sql);
+		$stmt->bindParam("idLeitura",$idLeitura);
+		$stmt->bindParam("valor",$leitura);
+		$stmt->bindParam("data",$dataAtual);
+		$stmt->execute();
+		$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	}
 	
 ?>
 
