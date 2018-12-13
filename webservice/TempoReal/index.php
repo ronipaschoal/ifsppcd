@@ -19,6 +19,8 @@ if(isset($postdata) && !empty($postdata)){
 			$idEstacao = $result[0]["idEstacao"];
 			
 			$result = $DBFactory->executeQuery("SELECT COUNT(*) numReg, max(data) as data FROM temporeal WHERE idLeitura = '" . $idLeitura . "'");
+
+			$numReg = $result['numReg']
 			
 			if(!is_null($result)){
 
@@ -31,7 +33,7 @@ if(isset($postdata) && !empty($postdata)){
 
 				if($difData > $result['tempoLeitura']){
 
-					if($result[0]["numReg"] > 0) {
+					if($numReg > 0) {
 						$result = $DBFactory->executeCommand("UPDATE temporeal SET valor = '" . str_replace(',', '.', $request->leitura->valor) . "', data = NOW() WHERE idLeitura = '" . $idLeitura . "'"); 
 					} else {
 						$result = $DBFactory->executeCommand("INSERT INTO temporeal(idLeitura, valor, data) VALUES('" . $idLeitura . "', '" . str_replace(',', '.', $request->leitura->valor) . "', NOW())"); 
