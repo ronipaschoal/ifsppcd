@@ -116,7 +116,7 @@ public class SensorActivity extends AppCompatActivity {
             if (leituraSensor != null && leituraSensor.getId() > 0){
                 this.setTitle(leituraSensor.getSensor().getNome());
 
-                txtSensor.setText(leituraSensor.getSensor().getNome());
+                txtSensor.setText(leituraSensor.getNome() + " - " + leituraSensor.getSensor().getNome());
                 txtUnidadeMedida.setText(leituraSensor.getUnidadeMedida());
                 chkAtivo.setChecked(leituraSensor.isAtivo());
 
