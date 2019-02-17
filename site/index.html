@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>PCD - IFSJBV</title>
+
+	<link rel="icon" type="image/png" href="./favicon.png">
+
+	<!-- Bootstrap core CSS -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
+
+	<!-- LIBs -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.0/css/all.css" integrity="sha384-aOkxzJ5uQz7WBObEZcHvV5JvRW3TUc2rNPA7pe3AwnsUohiw1Vj2Rgx2KSOkF5+h" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
+
+	<!-- Custom styles for this template -->
+	<link href="css/pcd_ifsjbv.css" rel="stylesheet">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.21/vue.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+</head>
+
+<body>
+	<div id="app">
+
+		<!-- Navigation -->
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+			<div class="container">
+				<a class="navbar-brand" href="#" onClick="ativarTudo();"><img src="./pcd_if_sjbv.png"> PCD - IFSJBV</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarResponsive">
+					<ul class="navbar-nav ml-auto">
+						<li class="nav-item active">
+							<a id="pcd0" class="nav-link" href="#" onClick="ativarTudo();"><i class="fas fa-list-ul"></i> TODAS</a>
+						</li>
+						<li class="nav-item">
+							<a id="pcd1" class="nav-link" href="#" onClick="ativarFixa();"><i class="fas fa-thumbtack"></i> PCD FIXA</a>
+						</li>
+						<li class="nav-item">
+							<a id="pcd2" class="nav-link" href="#" onClick="ativarMovel();"><i class="fas fa-expand-arrows-alt"></i> PCD MÓVEL</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+
+		<!-- Page Content -->
+		<div class="container">
+			<div id="lista_sensores" class="row">
+				<div class="col-lg-4 col-sm-6 portfolio-item" v-for="post in posts" v-bind:id="post.estacao_nome">
+					<div class="card">
+						<!-- <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a> -->
+						<div class="card-body" onClick="showDiv(this.id, this.dataset.name)" v-bind:id="post.id_sensor"  v-bind:data-name="post.leitura_nome">
+							<h5 class="card-title">{{ post.leitura_nome }}</h5>
+							<p class="card-text"> 
+									<span v-if="post.estacao_nome === 'ESTACAO FIXA'"><i class="fas fa-thumbtack" style="color: #9C27B0;"></i> {{post.estacao_nome}}</span>
+									<span v-else><i class="fas fa-expand-arrows-alt" style="color: #FF9800;"></i> {{post.estacao_nome}}</span>
+								</p>
+
+							<p class="card-text">Medição: {{ post.valor }} {{ post.unidadeMedida }}</p>
+							<p class="card-text">Status: 
+								<span v-if="post.ativo === '1'"><span class="badge badge-success">On</span></span>
+								<span v-else><span class="badge badge-danger">Off</span></span>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div><!-- /.row -->
+		</div><!-- /.container -->
+	</div> <!-- /#app -->
+
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="idHistorico"></h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-md-4">
+							<label for="idDataInicial">Data Inicial</label>
+							<input id="idDataInicial" type="text" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#idDataInicial" placeholder="DD-MM-AAA HH:MM:SS">
+						</div>
+						<div class="col-md-4">
+							<label for="idDataFinal">Data Final</label>
+							<input id="idDataFinal" type="text" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#idDataFinal" placeholder="DD-MM-AAA HH:MM:SS">
+						</div>
+						<div id="filterButton" class="col-md-4">
+							<button onClick="filtroModal();" class="btn btn-primary">Consultar</button>
+						</div>
+					</div>
+
+					</br></br>
+
+					<div class="col-lg-10 col-sm-10 portfolio-item">
+						<canvas id="primeiroGrafico"></canvas>
+					</div>
+					</br>
+
+					<table class="table table-bordered" id="idTable">
+						<thead>
+							<tr>
+								<th>Medição</th>
+								<th>Data</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+				
+				<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+				</div>
+			</div>
+		</div>
+	</div> <!-- /#myModal -->
+
+	<!-- Footer -->
+	<footer class="py-5 bg-dark">
+		<div class="container">
+			<p class="m-0 text-center text-white">Copyright &copy; IF SJBV 2018</p>
+		</div>
+	<!-- /.container -->
+	</footer>
+
+	<!-- JavaScript -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/locale/pt-br.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
+
+
+	<!-- VueJS -->
+	<script>
+		var vm = new Vue({
+			el: '#app',
+			data: {
+				posts: [
+	
+				]
+			},
+			created: function () {
+				axios.get("http://34.197.30.158/webservice/TempoReal/medicao.php")
+				.then(response => {this.posts = response.data})
+			}
+		});
+	</script>
+
+	<!-- jQuery -->
+	<script type="text/javascript">
+	
+		var arrayDatas = [];
+		var arrayMedicoes = [];
+		var idModal = "0";
+		var nomeSensor = "";
+	
+		function ativarTudo()
+		{
+			var tag = document.getElementsByTagName("div");
+			for (var i=0; i<tag.length; i++) {
+				var div = tag[i];		
+				var verifica = div.id;
+			
+					if (verifica == "ESTACAO MOVEL" || verifica == "ESTACAO FIXA"){				
+						div.style.display = 'inline';
+					}				
+			}
+		}
+		
+		function ativarFixa()
+		{
+			var tag = document.getElementsByTagName("div");
+			for (var i=0; i<tag.length; i++) {
+				var div = tag[i];		
+				var verifica = div.id;
+			
+					if (verifica == "ESTACAO MOVEL"){				
+						div.style.display = 'none';
+					}else if (verifica == "ESTACAO FIXA"){				
+						div.style.display = 'inline';
+					}			
+			}
+		}
+		
+		function ativarMovel()
+		{
+			var tag = document.getElementsByTagName("div");
+			for (var i=0; i<tag.length; i++) {
+				var div = tag[i];		
+				var verifica = div.id;
+			
+					if (verifica == "ESTACAO FIXA"){				
+						div.style.display = 'none';
+					}else if (verifica == "ESTACAO MOVEL"){				
+						div.style.display = 'inline';
+					}				
+			}	
+		}
+	
+		function showDiv(id, name)
+		{
+			idModal = id;
+			nomeSensor = name;
+		
+			$("#myModal").modal();
+			
+			var data = new Date();
+			var dataInicial = data.getDate() + "-" + (data.getMonth() + 1) + "-" + data.getFullYear() +  " 00:00:00";
+			var dataFinal = data.getDate() + "-" + (data.getMonth() + 1) + "-" + data.getFullYear() + " 23:59:59";
+			
+			$("#idDataInicial").val(dataInicial);
+			$("#idDataFinal").val(dataFinal);
+			
+			dataInicial = dataInicial.substring(0, 10).split('-').reverse().join('-') + dataInicial.substring(10);
+			dataFinal = dataFinal.substring(0, 10).split('-').reverse().join('-') + dataFinal.substring(10);
+			
+			consultaHistorico(id, dataInicial, dataFinal);
+		}
+		
+		function filtroModal()
+		{
+			var dataInicial = $("#idDataInicial").val();
+			var dataFinal = $("#idDataFinal").val();
+			
+			dataInicial = dataInicial.substring(0, 10).split('-').reverse().join('-') + dataInicial.substring(10);
+			dataFinal = dataFinal.substring(0, 10).split('-').reverse().join('-') + dataFinal.substring(10);
+			
+			consultaHistorico(idModal, dataInicial, dataFinal);
+		}
+		
+		function consultaHistorico(id, dataInicial, dataFinal)
+		{
+			$.ajax({
+				url: "http://34.197.30.158/webservice/TempoReal/medicaofiltro.php",
+				dataType: 'json',
+				crossDomain: true,
+				xhrFields: {
+					withCredentials: true
+				},
+				type: 'post',
+				contentType: 'application/json',
+				data: JSON.stringify( {"data_inicial":dataInicial,"data_final":dataFinal,"id_sensor":id} ),
+				processData: false,
+			})
+			.done(function( data ) {
+				document.getElementById('idHistorico').innerText = "HISTÓRICO " + nomeSensor;
+				
+				var table = document.getElementById("idTable");
+				var tbody = table.getElementsByTagName("tbody").item(0);
+				
+				tbody.innerHTML="";
+	
+				arrayDatas =[];
+				arrayMedicoes =[];
+	
+				for(var i=0; i< data.length; i++){
+							tbody.innerHTML += "<tr><td>"+data[i].valor+"</td><td>"+data[i].data.substring(0, 10).split('-').reverse().join('-') + data[i].data.substring(10)+"</td></tr>";   
+						arrayDatas.push(data[i].data.substring(0, 10).split('-').reverse().join('-') + data[i].data.substring(10));
+						arrayMedicoes.push(data[i].valor);
+				}
+				
+				let primeiroGrafico = document.getElementById('primeiroGrafico').getContext('2d');
+				let chart = new Chart(primeiroGrafico, {
+					type: 'line',
+										
+					data: {
+						labels: arrayDatas,
+									
+						datasets: [
+							{
+								label: 'Medições no Período',
+								data: arrayMedicoes
+							}
+						]
+					}
+				});
+			});
+		}
+
+		// HIDE MENU ON CLICK
+		$('.nav-link').click( function(){
+			$('.navbar button').click();
+		});
+
+		// ADD CLASS ACTIVE IN THE MENU
+		$('.navbar-nav li').click( function(){
+
+			$('.navbar-nav li').each( function(){
+				$(this).removeClass('active');
+			});
+
+			$(this).addClass('active');
+		});
+
+		// ADD DATAPIKER
+		$(function () {
+			$('#myModal input.form-control').datetimepicker({
+				format: 'DD-MM-YYYY HH:mm:ss',
+				icons: {
+                    time: "far fa-clock"
+                }
+			});
+		});
+
+	</script>
+
+</body>
+</html>
