@@ -57,7 +57,7 @@
 				<div class="col-lg-4 col-sm-6 portfolio-item" v-for="post in posts" v-bind:id="post.estacao_nome">
 					<div class="card">
 						<!-- <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a> -->
-						<div class="card-body" onClick="showDiv(this.id, this.dataset.name)" v-bind:id="post.id_sensor"  v-bind:data-name="post.leitura_nome">
+						<div class="card-body" onClick="showDiv(this.id, this.dataset.name)" v-bind:id="post.id_leitura"  v-bind:data-name="post.leitura_nome">
 							<h5 class="card-title">{{ post.leitura_nome }}</h5>
 							<p class="card-text"> 
 									<span v-if="post.estacao_nome === 'ESTACAO FIXA'"><i class="fas fa-thumbtack" style="color: #9C27B0;"></i> {{post.estacao_nome}}</span>
@@ -65,6 +65,7 @@
 								</p>
 
 							<p class="card-text">Medição: {{ post.valor }} {{ post.unidadeMedida }}</p>
+							<p class="card-text">Última Medição: {{ formatDate(post.data) }}</p>
 							<p class="card-text">Status: 
 								<span v-if="post.ativo === '1'"><span class="badge badge-success">On</span></span>
 								<span v-else><span class="badge badge-danger">Off</span></span>
@@ -155,7 +156,7 @@
 			},
 			created: function () {
 				axios.get("http://34.197.30.158/webservice/TempoReal/medicao.php")
-				.then(response => {this.posts = response.data})
+				.then(response => {this.posts = response.data;})
 			}
 		});
 	</script>
@@ -238,7 +239,7 @@
 			
 			dataInicial = dataInicial.substring(0, 10).split('-').reverse().join('-') + dataInicial.substring(10);
 			dataFinal = dataFinal.substring(0, 10).split('-').reverse().join('-') + dataFinal.substring(10);
-			
+
 			consultaHistorico(idModal, dataInicial, dataFinal);
 		}
 		
@@ -253,7 +254,7 @@
 				},
 				type: 'post',
 				contentType: 'application/json',
-				data: JSON.stringify( {"data_inicial":dataInicial,"data_final":dataFinal,"id_sensor":id} ),
+				data: JSON.stringify( {"data_inicial":dataInicial,"data_final":dataFinal,"id_leitura":id} ),
 				processData: false,
 			})
 			.done(function( data ) {
@@ -266,6 +267,8 @@
 	
 				arrayDatas =[];
 				arrayMedicoes =[];
+
+				console.log(data);
 	
 				for(var i=0; i< data.length; i++){
 							tbody.innerHTML += "<tr><td>"+data[i].valor+"</td><td>"+data[i].data.substring(0, 10).split('-').reverse().join('-') + data[i].data.substring(10)+"</td></tr>";   
@@ -315,6 +318,29 @@
                 }
 			});
 		});
+
+		function formatDate(data) {
+		
+			date = new Date(data);
+
+			var hour = date.getHours();
+			var minute = date.getMinutes();
+			var second = date.getSeconds();
+
+			var day = date.getDate();
+			var month = date.getMonth() + 1;
+			var year = date.getFullYear();
+
+			if (hour < 10) { hour = '0' + hour; }
+			if (minute < 10) { minute = '0' + minute; }
+			if (second < 10) { second = '0' + second; }
+
+			if (day < 10) { day = '0' + day; }
+			if (month < 10) { month = '0' + month; }
+
+			return hour + ':' + minute + ':' + second + ' - ' + day + '/' + month + '/' + year;
+		}
+
 
 	</script>
 
